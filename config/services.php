@@ -94,8 +94,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ImportFromLeanCloudHandler::class)
         ->arg(DoctrineRepository::class, service('app.repository.doctrine.import'));
 
-    $services->set('app.image_storage.local', FilesystemStorage::class)->args([env('FS_PREFIX')->resolve() . 'a/']);
-    $services->set('app.video_storage.local', FilesystemStorage::class)->args([env('FS_PREFIX')->resolve() . 'videocontent/']);
+    $services->set('app.image_storage.local', FilesystemStorage::class)->args([env('LOCAL_STORAGE_PATH')->resolve() . '/a/']);
+    $services->set('app.video_storage.local', FilesystemStorage::class)->args([env('LOCAL_STORAGE_PATH')->resolve() . '/videocontent/']);
 
     $services->set('app.s3_client', S3Client::class)->arg('$configuration', [
         'endpoint' => env('S3_ENDPOINT'),

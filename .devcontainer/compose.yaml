@@ -1,9 +1,26 @@
 volumes:
   postgres17-data:
+  caddy_data:
+  caddy_config:
+  files:
 
 services:
+  mailpit: # 8025, 1025
+    image: axllent/mailpit:latest
+    pull_policy: always
+    restart: unless-stopped
+  caddy:
+      image: caddy:2
+      pull_policy: always
+      restart: unless-stopped
+      volumes:
+        - caddy_data:/data
+        - caddy_config:/config
+        - files:/files
+      command: ["caddy", "file-server", "--root", "/files", "--listen", ":2015", "--browse"]
   postgres17:
     image: docker.io/library/postgres:17
+    pull_policy: always
     healthcheck:
       test: pg_isready -U postgres -h localhost
       interval: 5s
@@ -23,5 +40,6 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ../..:/workspaces:cached
+      - files:/files
     env_file: ./workspace.env
     command: sleep infinity
