@@ -40,6 +40,8 @@ RUN --mount=type=bind,from=mlocati/php-extension-installer:2,source=/usr/bin/ins
 	gmp \
 	intl \
 	opcache \
+	swoole \
+	inotify \
 	pcntl \
 	protobuf \
 	pdo_mysql \
@@ -66,7 +68,7 @@ RUN --mount=type=cache,target=/root/.composer \
 	composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress
 
 RUN --mount=type=bind,source=.,target=/usr/src/app \
-	cp -R /usr/src/app/{bin,config,migrations,public,src,templates,.env,.rr*.yaml} ./; \
+	cp -R /usr/src/app/{bin,config,migrations,public,src,swoole-runtime-bundle,templates,.env} ./; \
 	mkdir -p var/cache var/log; \
 	composer dump-autoload --classmap-authoritative --no-dev; \
 	composer dump-env prod; \
@@ -77,4 +79,4 @@ COPY --from=vite /app/public/build/ /app/public/build/
 
 EXPOSE 8080/tcp
 
-CMD ["rr", "serve", "-c", ".rr.yaml"]
+CMD ["php", "-f", "public/index.php", "start"]
