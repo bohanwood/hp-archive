@@ -16,8 +16,6 @@ RUN --mount=type=bind,source=.,target=/usr/src/app \
 	cp -R /usr/src/app/{assets,tsconfig.json,vite.config.mjs} ./; \
 	pnpm build
 
-FROM ghcr.io/roadrunner-server/roadrunner:2024 AS roadrunner
-
 FROM php:8.4-cli-trixie
 
 SHELL ["/bin/bash", "-eux", "-o", "pipefail", "-c"]
@@ -76,8 +74,6 @@ RUN --mount=type=bind,source=.,target=/usr/src/app \
 	chmod a+rx bin/console; sync;
 
 COPY --from=vite /app/public/build/ /app/public/build/
-
-COPY --from=roadrunner /usr/bin/rr /usr/local/bin/rr
 
 EXPOSE 8080/tcp
 
