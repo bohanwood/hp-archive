@@ -90,7 +90,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ],
         'swoole-http-server' => [
-            'host' => '[::]',
+            'host' => '0.0.0.0',
             'port' => 80,
             // A prefix for the process name of the master process and workers.
             // By default the master process will be named `mezzio-master`,
