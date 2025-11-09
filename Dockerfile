@@ -64,11 +64,12 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY --link docker/php/conf.d/app.prod.ini $PHP_INI_DIR/conf.d/
 
 COPY --link composer.* symfony.* ./
+COPY --link swoole-runtime-bundle/ ./swoole-runtime-bundle/
 RUN --mount=type=cache,target=/root/.composer \
 	composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress
 
 RUN --mount=type=bind,source=.,target=/usr/src/app \
-	cp -R /usr/src/app/{bin,config,migrations,public,src,swoole-runtime-bundle,templates,.env} ./; \
+	cp -R /usr/src/app/{bin,config,migrations,public,src,templates,.env} ./; \
 	mkdir -p var/cache var/log; \
 	composer dump-autoload --classmap-authoritative --no-dev; \
 	composer dump-env prod; \
