@@ -19,6 +19,10 @@ when@dev:
             #chromephp:
             #    type: chromephp
             #    level: info
+            swoole:
+                type: stream
+                path: "php://stderr"
+                channels: ["swoole"]
             console:
                 type: console
                 process_psr_3_messages: false
